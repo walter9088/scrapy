@@ -9,6 +9,8 @@ from scrapy.conf import settings
 
 from pymongo import MongoClient
 
+from elasticsearch import Elasticsearch
+
 import jieba
 
 class TutorialPipeline(object):
@@ -27,6 +29,19 @@ class AlertPipeline(object):
 
         return item
 
+
+
+class EsPipeline(object):
+    def __init__(self):
+       self.esclient = Elasticsearch(settings['ES_SERVER'])
+
+
+    def process_item(self,item,spider):
+
+        self.esclient.index(index='test',doc_type='test',body={'title':item['title'],'date':item['date'],'link':item['link'],'tags':item['tags']})
+
+
+        return item
 
 class MongoPipeline(object):
 

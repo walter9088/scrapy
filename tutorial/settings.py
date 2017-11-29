@@ -21,6 +21,9 @@ MONGODB_PORT = 27017
 MONGODB_DB = 'test'
 MONGODB_COLLECTION = 'test'
 
+
+ES_SERVER = '127.0.0.1:9200'
+
 DICT_PATH = '/Users/walter/tutorial/tutorial/dict.txt'
 
 
@@ -77,7 +80,8 @@ ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
     'tutorial.pipelines.TutorialPipeline': 300,
     'tutorial.pipelines.AlertPipeline': 200,
-    'tutorial.pipelines.MongoPipeline': 100
+    'tutorial.pipelines.MongoPipeline': 100,
+    'tutorial.pipelines.EsPipeline': 400
 
 
 }
