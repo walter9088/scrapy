@@ -18,16 +18,6 @@ class TutorialPipeline(object):
         return item
 
 
-class AlertPipeline(object):
-    def process_item(self,item,spider):
-
-        jieba.load_userdict(settings['DICT_PATH'])
-
-        tags = list(jieba.cut(item['title']))
-
-        item['tags'] = tags
-
-        return item
 
 
 
@@ -38,7 +28,7 @@ class EsPipeline(object):
 
     def process_item(self,item,spider):
 
-        self.esclient.index(index='test',doc_type='test',body={'title':item['title'],'date':item['date'],'link':item['link'],'tags':item['tags']})
+        ##self.esclient.index(index='test',doc_type='test',body={'title':item['title'],'date':item['date'],'link':item['link'],'tags':item['tags']})
 
 
         return item
@@ -53,7 +43,15 @@ class MongoPipeline(object):
         db = connection[settings['MONGODB_DB']]
         self.collection = db[settings['MONGODB_COLLECTION']]
 
+        jieba.load_userdict(settings['DICT_PATH'])
+
     def process_item(self,item,spider):
+
+
+
+        tags = list(jieba.cut(item['title']))
+
+        item['tags'] = tags
 
         valid = True
 
