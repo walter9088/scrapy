@@ -24,6 +24,8 @@ class TutorialItem(scrapy.Item):
 
     tags = scrapy.Field()
 
+    content = scrapy.Field()
+
 
 
     pass

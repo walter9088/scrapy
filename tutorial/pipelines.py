@@ -13,6 +13,9 @@ from elasticsearch import Elasticsearch
 
 import jieba
 
+import urllib2
+from bs4 import BeautifulSoup
+
 class TutorialPipeline(object):
     def process_item(self, item, spider):
         return item
@@ -47,11 +50,11 @@ class MongoPipeline(object):
 
     def process_item(self,item,spider):
 
-
-
         tags = list(jieba.cut(item['title']))
 
         item['tags'] = tags
+
+        item['content'] = self.get_content()
 
         valid = True
 
@@ -63,3 +66,23 @@ class MongoPipeline(object):
             self.collection.insert(dict(item))
 
         return item
+
+    def get_content(self,item):
+
+        content = urllib2.urlopen(item['link'])
+
+        soup = BeautifulSoup(content)
+
+        tags = soup.select("div.article-info")
+
+        lists = []
+        for tag in tags:
+            lines = tag.text.splitlines()
+            for line in lines:
+                strip_line = line.strip()
+                if strip_line != u"":
+                    lists.append(strip_line.strip())
+
+        str_convert = '\n'.join(lists)
+
+        return str_convert
